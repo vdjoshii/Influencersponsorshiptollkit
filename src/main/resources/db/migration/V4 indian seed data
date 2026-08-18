@@ -1,0 +1,86 @@
+-- V4: Replace seed data with India-centric names and INR amounts
+-- Clear old data first (order matters due to FK constraints)
+DELETE FROM offers;
+DELETE FROM users;
+DELETE FROM influencers;
+DELETE FROM brands;
+
+-- Reset auto increment
+ALTER TABLE offers AUTO_INCREMENT = 1;
+ALTER TABLE influencers AUTO_INCREMENT = 1;
+ALTER TABLE brands AUTO_INCREMENT = 1;
+ALTER TABLE users AUTO_INCREMENT = 1;
+
+-- Indian Influencers
+INSERT INTO influencers (name, platform, followers, total_earnings) VALUES
+('Priya Sharma', 'Instagram', 520000, 0.0),
+('Rahul Verma', 'YouTube', 1200000, 0.0),
+('Ananya Singh', 'Instagram', 340000, 0.0),
+('Karan Mehta', 'YouTube', 890000, 0.0),
+('Sneha Patel', 'Instagram', 410000, 0.0),
+('Arjun Nair', 'YouTube', 670000, 0.0),
+('Pooja Iyer', 'Instagram', 280000, 0.0),
+('Vikram Joshi', 'YouTube', 950000, 0.0),
+('Divya Reddy', 'Instagram', 190000, 0.0),
+('Aditya Kumar', 'YouTube', 1500000, 0.0),
+('Neha Gupta', 'Instagram', 320000, 0.0),
+('Siddharth Rao', 'YouTube', 730000, 0.0),
+('Riya Malhotra', 'Instagram', 230000, 0.0),
+('Rohan Das', 'YouTube', 580000, 0.0),
+('Kavya Nair', 'Instagram', 460000, 0.0);
+
+-- Indian Brands
+INSERT INTO brands (name, marketing_budget) VALUES
+('Mamaearth', 2500000.0),
+('Boat Lifestyle', 3800000.0),
+('Myntra', 5000000.0),
+('Zomato', 4200000.0),
+('Swiggy', 3500000.0),
+('CRED', 6000000.0),
+('Dream11', 4800000.0),
+('Meesho', 2200000.0),
+('Nykaa', 3200000.0),
+('PhonePe', 5500000.0),
+('Lenskart', 2800000.0),
+('Groww', 3900000.0),
+('Ola', 4600000.0),
+('Paytm', 5200000.0),
+('Jio', 7000000.0);
+
+-- Sample Offers (in INR)
+INSERT INTO offers (proposed_amount, status, brand_id, influencer_id) VALUES
+(75000.0, 'PENDING', 1, 1),
+(150000.0, 'ACCEPTED', 2, 2),
+(90000.0, 'PENDING', 3, 3),
+(200000.0, 'ACCEPTED', 4, 4),
+(60000.0, 'REJECTED', 5, 5),
+(120000.0, 'PENDING', 6, 6),
+(180000.0, 'ACCEPTED', 7, 7),
+(95000.0, 'PENDING', 8, 8),
+(110000.0, 'PENDING', 9, 9),
+(250000.0, 'ACCEPTED', 10, 10),
+(85000.0, 'REJECTED', 11, 11),
+(130000.0, 'PENDING', 12, 12),
+(160000.0, 'PENDING', 13, 13),
+(70000.0, 'ACCEPTED', 14, 14),
+(220000.0, 'PENDING', 15, 15);
+
+-- Update earnings for accepted offers
+UPDATE influencers SET total_earnings = 150000.0 WHERE id = 2;
+UPDATE influencers SET total_earnings = 200000.0 WHERE id = 4;
+UPDATE influencers SET total_earnings = 180000.0 WHERE id = 7;
+UPDATE influencers SET total_earnings = 250000.0 WHERE id = 10;
+UPDATE influencers SET total_earnings = 70000.0 WHERE id = 14;
+
+-- Deduct from brand budgets for accepted offers
+UPDATE brands SET marketing_budget = marketing_budget - 150000.0 WHERE id = 2;
+UPDATE brands SET marketing_budget = marketing_budget - 200000.0 WHERE id = 4;
+UPDATE brands SET marketing_budget = marketing_budget - 180000.0 WHERE id = 7;
+UPDATE brands SET marketing_budget = marketing_budget - 250000.0 WHERE id = 10;
+UPDATE brands SET marketing_budget = marketing_budget - 70000.0 WHERE id = 14;
+
+-- Demo user accounts (password is BCrypt of "password123")
+-- These accounts are pre-linked to brand_id=1 and influencer_id=1
+INSERT INTO users (email, password, role, brand_id, influencer_id) VALUES
+('mamaearth@demo.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lFRi', 'BRAND', 1, NULL),
+('priya@demo.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lFRi', 'INFLUENCER', NULL, 1);
